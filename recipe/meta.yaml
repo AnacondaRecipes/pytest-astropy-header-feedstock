@@ -35,7 +35,6 @@ test:
   requires:
     - pip
     - pytest
-    - astropy >=4.0
     - numpy
   commands:
     - pip check
