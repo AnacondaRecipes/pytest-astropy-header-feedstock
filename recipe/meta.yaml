@@ -1,7 +1,5 @@
 {% set name = "pytest-astropy-header" %}
-{% set version = "0.1.2" %}
-{% set git_url = "https://github.com/astropy/pytest-astropy-header" %}
-{% set sha256 = "afdc79650b24d175d54da459fc88f597144e65af3e7eb85fe9e61231f25307f9" %}
+{% set version = "0.2.2" %}
 
 package:
   name: {{ name|lower }}
@@ -10,35 +8,49 @@ package:
 source:
   fn: {{ name }}-{{ version }}.tar.gz
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: {{ sha256 }}
+  sha256: 77891101c94b75a8ca305453b879b318ab6001b370df02be2c0b6d1bb322db10
 
 build:
-  noarch: python
+  skip: True  # [py<37]
   number: 0
-  script: "{{ PYTHON }} -m pip install . -vv"
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
 
 requirements:
   host:
     - python
     - pip
-    - pytest >=3.0
+    - setuptools
+    - wheel
+    - setuptools_scm
   run:
     - python
-    - pytest >=3.0
+    - pytest >=4.6
 
 test:
+  source_files:
+    - tests/
   imports:
     - pytest_astropy_header
     - pytest_astropy_header.display
+  requires:
+    - pip
+    - pytest
+    - numpy
+  commands:
+    - pip check
+    - pytest tests -vv
 
 about:
-  home: {{ git_url }}
+  home: https://github.com/astropy/pytest-astropy-header
   license_family: BSD
-  license: BSD 3-Clause
+  license: BSD-3-Clause
   license_file: LICENSE.rst
-  summary: 'Pytest plugin to add diagnostic information to the header of the test output'
-  doc_url: {{ git_url }}
-  dev_url: {{ git_url }}
+  description: |
+    This plugin package provides a way to include information about the system,
+    Python installation, and select dependencies in the header of the output when running pytest.
+  summary: Pytest plugin to add diagnostic information to the header of the test output
+  doc_url: https://github.com/astropy/pytest-astropy-header
+  dev_url: https://github.com/astropy/pytest-astropy-header
 
 extra:
   recipe-maintainers:
